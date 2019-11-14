@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "net.cuddlebat.skygrid.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "OverworldDimensionMixin",
+    "NetherDimensionMixin",
+    "EndDimensionMixin",
+	"LevelGeneratorTypeMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
