@@ -5,7 +5,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.util.function.Supplier;
 
-import net.cuddlebat.skygrid.Skygrid;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.MappingResolver;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.chunk.ChunkGeneratorType;
@@ -16,18 +17,15 @@ public class ModGeneratorTypes
 	public static ChunkGeneratorType<SkygridChunkGeneratorConfig, SkygridChunkGenerator> SKYGRID_CHUNK;
 	public static LevelGeneratorType SKYGRID_WORLD;
 	
-//	public static void init() throws Throwable
-//	{
-//		initChunkGenType();
-//		initLevelGenType();
-//	}
-	
 	@SuppressWarnings({
 		"unchecked", "rawtypes"
 	})
 	public static void initChunkGenType() throws Throwable
 	{
-		Class<?> iface = Class.forName("net.minecraft.world.gen.chunk.ChunkGeneratorFactory");
+		String unmapped = "net.minecraft.class_2801";
+		MappingResolver resolver = FabricLoader.getInstance().getMappingResolver();
+		String mapped = resolver.mapClassName("intermediary", unmapped);
+		Class<?> iface = Class.forName(mapped);
 		InvocationHandler handler = new GenFactoryInvocationHandler<>(SkygridChunkGenerator::new);
 		Object proxy = Proxy.newProxyInstance(iface.getClassLoader(), new Class[] { iface }, handler);
 		Constructor<ChunkGeneratorType> ctor = ChunkGeneratorType.class.getConstructor(iface, boolean.class, Supplier.class);
